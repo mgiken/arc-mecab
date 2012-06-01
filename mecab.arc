@@ -15,10 +15,11 @@
 (= mecab-arg* "")
 
 (def mecab (s (o test) (o arg mecab-arg*))
-  (withs (mdl (mecab-model-new arg)
-          mec (mecab-model-new-tagger mdl)
-          lat (mecab-model-new-lattice mdl))
-    (after (do (mecab-lattice-set-sentence lat s)
+  (withs (mdl nil mec nil lat nil)
+    (after (do (= mdl (mecab-model-new arg)
+                  mec (mecab-model-new-tagger mdl)
+                  lat (mecab-model-new-lattice mdl))
+               (mecab-lattice-set-sentence lat s)
                (mecab-parse-lattice mec lat)
                (accum a
                  (w/instring ins (mecab-lattice-tostr lat)
@@ -27,6 +28,6 @@
                        (if test
                            (only.a:test node)
                            (a node)))))))
-      (mecab-destroy mec)
-      (mecab-lattice-destroy lat)
-      (mecab-model-destroy mdl))))
+           (and mec (mecab-destroy mec))
+           (and lat (mecab-lattice-destroy lat))
+           (and mdl (mecab-model-destroy mdl)))))
