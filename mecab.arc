@@ -15,7 +15,7 @@
 (= mecab-arg* "")
 
 (def mecab (s (o test) (o arg mecab-arg*))
-  (withs (mdl nil mec nil lat nil)
+  (with (mdl nil mec nil lat nil)
     (after (do (= mdl (mecab-model-new arg)
                   mec (mecab-model-new-tagger mdl)
                   lat (mecab-model-new-lattice mdl))
